@@ -5,6 +5,14 @@ extends Control
 signal changed
 signal value_changed(value)
 
+enum FillMode {
+	LEFT_TO_RIGHT,
+	RIGHT_TO_LEFT,
+	TOP_TO_BOTTOM,
+	BOTTOM_TO_TOP,
+}
+
+export(FillMode) var fill_mode: int setget set_fill_mode, get_fill_mode
 export var filled: Texture setget set_filled, get_filled
 export var filled_tint := Color.white setget set_filled_tint, get_filled_tint
 export var empty: Texture setget set_empty, get_empty
@@ -30,6 +38,14 @@ func _draw() -> void:
 func update() -> void:
 	.update()
 	_update_rect_size()
+
+
+func set_fill_mode(val: int) -> void:
+	fill_mode = val
+
+
+func get_fill_mode() -> int:
+	return fill_mode
 
 
 func set_filled(val: Texture) -> void:

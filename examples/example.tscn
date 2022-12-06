@@ -1,0 +1,46 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://addons/segmented_progress/segmented_progress.gd" type="Script" id=1]
+[ext_resource path="res://examples/white_bar.png" type="Texture" id=2]
+
+[node name="Example" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+margin_right = 1024.0
+margin_bottom = 56.0
+
+[node name="SegmentedProgress" type="Control" parent="VBoxContainer"]
+margin_right = 30.0
+margin_bottom = 16.0
+rect_min_size = Vector2( 30, 16 )
+size_flags_horizontal = 0
+script = ExtResource( 1 )
+filled = ExtResource( 2 )
+empty = ExtResource( 2 )
+empty_tint = Color( 1, 1, 1, 0.133333 )
+max_value = 5
+value = 3
+
+[node name="SegmentedProgress2" type="Control" parent="VBoxContainer"]
+margin_top = 20.0
+margin_right = 30.0
+margin_bottom = 36.0
+rect_min_size = Vector2( 30, 16 )
+size_flags_horizontal = 0
+script = ExtResource( 1 )
+filled = ExtResource( 2 )
+max_value = 5
+value = 3
+
+[node name="SegmentedProgress3" type="Control" parent="VBoxContainer"]
+margin_top = 40.0
+margin_right = 1024.0
+margin_bottom = 56.0
+rect_min_size = Vector2( 30, 16 )
+script = ExtResource( 1 )
+empty = ExtResource( 2 )
+empty_tint = Color( 1, 1, 1, 0.133333 )
+max_value = 5
+value = 2

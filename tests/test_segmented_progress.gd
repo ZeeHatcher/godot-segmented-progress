@@ -8,6 +8,10 @@ func test_can_create() -> void:
 	assert_not_null(SegmentedProgress.new())
 
 
+func test_fill_mode_accessors() -> void:
+	assert_accessors(SegmentedProgress.new(), "fill_mode", 0, 1)
+	
+
 func test_filled_accessors() -> void:
 	assert_accessors(SegmentedProgress.new(), "filled", null, double(ImageTexture).new())
 

@@ -25,8 +25,9 @@ func _draw() -> void:
 	var x := 0.0
 	
 	for n in range(max_value):
-		var texture: Texture = filled if n + 1 <= value else empty
-		var tint: Color = filled_tint if n + 1 <= value else empty_tint
+		var is_filled := n + 1 <= value
+		var texture: Texture = filled if is_filled else empty
+		var tint: Color = filled_tint if is_filled else empty_tint
 		
 		if not texture:
 			continue

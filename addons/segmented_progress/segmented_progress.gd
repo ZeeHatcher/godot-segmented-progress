@@ -22,7 +22,7 @@ export var value: int setget set_value, get_value
 
 
 func _draw() -> void:
-	var x := 0.0
+	var pos := _get_initial_pos()
 	
 	for n in range(max_value):
 		var is_filled := n + 1 <= value
@@ -31,9 +31,9 @@ func _draw() -> void:
 		
 		if not texture:
 			continue
-			
-		draw_texture(texture, Vector2(x, 0), tint)
-		x += texture.get_width()
+		
+		draw_texture(texture, pos, tint)
+		pos = _advance_pos(pos, texture.get_size())
 
 
 func update() -> void:
@@ -127,3 +127,34 @@ func _update_rect_size() -> void:
 	
 	rect_min_size = Vector2(width, height)
 	rect_size = rect_min_size
+
+
+func _get_initial_pos() -> Vector2:
+	var texture: Texture = null
+	
+	if filled:
+		texture = filled
+	elif empty:
+		texture = empty
+	
+	match fill_mode:
+		FillMode.RIGHT_TO_LEFT:
+			return Vector2(rect_size.x - texture.get_width(), 0)
+		FillMode.BOTTOM_TO_TOP:
+			return Vector2(0, rect_size.y - texture.get_height())
+	
+	return Vector2()
+
+
+func _advance_pos(pos: Vector2, texture_dimensions: Vector2) -> Vector2:
+	match fill_mode:
+		FillMode.LEFT_TO_RIGHT:
+			pos.x += texture_dimensions.x
+		FillMode.RIGHT_TO_LEFT:
+			pos.x -= texture_dimensions.x
+		FillMode.TOP_TO_BOTTOM:
+			pos.y += texture_dimensions.y
+		FillMode.BOTTOM_TO_TOP:
+			pos.y -= texture_dimensions.y
+	
+	return pos

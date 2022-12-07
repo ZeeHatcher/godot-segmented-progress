@@ -43,6 +43,7 @@ func update() -> void:
 
 func set_fill_mode(val: int) -> void:
 	fill_mode = val
+	update()
 
 
 func get_fill_mode() -> int:

@@ -19,28 +19,49 @@ size_flags_horizontal = 0
 script = ExtResource( 1 )
 filled = ExtResource( 2 )
 empty = ExtResource( 2 )
-empty_tint = Color( 1, 1, 1, 0.133333 )
+empty_tint = Color( 1, 1, 1, 0.109804 )
 max_value = 5
-value = 3
+value = 2
 
-[node name="SegmentedProgress2" type="Control" parent="VBoxContainer"]
+[node name="SegmentedProgress3" type="Control" parent="VBoxContainer"]
 margin_top = 20.0
 margin_right = 30.0
 margin_bottom = 36.0
 rect_min_size = Vector2( 30, 16 )
 size_flags_horizontal = 0
 script = ExtResource( 1 )
+fill_mode = 1
 filled = ExtResource( 2 )
+empty = ExtResource( 2 )
+empty_tint = Color( 1, 1, 1, 0.109804 )
 max_value = 5
 value = 3
 
-[node name="SegmentedProgress3" type="Control" parent="VBoxContainer"]
+[node name="SegmentedProgress2" type="Control" parent="VBoxContainer"]
 margin_top = 40.0
-margin_right = 1024.0
-margin_bottom = 56.0
-rect_min_size = Vector2( 30, 16 )
+margin_right = 6.0
+margin_bottom = 104.0
+rect_min_size = Vector2( 6, 64 )
+size_flags_horizontal = 0
+size_flags_vertical = 0
 script = ExtResource( 1 )
+fill_mode = 2
+filled = ExtResource( 2 )
 empty = ExtResource( 2 )
-empty_tint = Color( 1, 1, 1, 0.133333 )
-max_value = 5
+empty_tint = Color( 1, 1, 1, 0.192157 )
+max_value = 4
+value = 2
+
+[node name="SegmentedProgress4" type="Control" parent="VBoxContainer"]
+margin_top = 108.0
+margin_right = 6.0
+margin_bottom = 204.0
+rect_min_size = Vector2( 6, 96 )
+size_flags_horizontal = 0
+script = ExtResource( 1 )
+fill_mode = 3
+filled = ExtResource( 2 )
+empty = ExtResource( 2 )
+empty_tint = Color( 1, 1, 1, 0.235294 )
+max_value = 6
 value = 2

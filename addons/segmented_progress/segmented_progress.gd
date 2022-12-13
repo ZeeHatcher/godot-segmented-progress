@@ -12,6 +12,12 @@ enum FillMode {
 	BOTTOM_TO_TOP,
 }
 
+const Filler := preload("fillers/filler.gd")
+const LeftToRightFiller := preload("fillers/left_to_right_filler.gd")
+const RightToLeftFiller := preload("fillers/right_to_left_filler.gd")
+const TopToBottomFiller := preload("fillers/top_to_bottom_filler.gd")
+const BottomToTopFiller := preload("fillers/bottom_to_top_filler.gd")
+
 export(FillMode) var fill_mode: int setget set_fill_mode, get_fill_mode
 export var filled: Texture setget set_filled, get_filled
 export var filled_tint := Color.white setget set_filled_tint, get_filled_tint
@@ -20,9 +26,11 @@ export var empty_tint := Color.white setget set_empty_tint, get_empty_tint
 export var max_value: int setget set_max_value, get_max_value
 export var value: int setget set_value, get_value
 
+var _filler: Filler = LeftToRightFiller.new()
+
 
 func _draw() -> void:
-	var pos := _get_initial_pos()
+	var pos := _filler.get_initial_position(value, max_value)
 	
 	for n in range(max_value):
 		var is_filled := n + 1 <= value
@@ -33,16 +41,36 @@ func _draw() -> void:
 			continue
 		
 		draw_texture(texture, pos, tint)
-		pos = _advance_pos(pos, texture.get_size())
+		pos = _filler.advance(pos, texture.get_size())
 
 
 func update() -> void:
+	rect_min_size = _filler.calculate_rect_size(value, max_value)
+	rect_size = rect_min_size
+	
 	.update()
-	_update_rect_size()
 
 
 func set_fill_mode(val: int) -> void:
 	fill_mode = val
+	
+	if _filler and is_instance_valid(_filler):
+		_filler.free()
+	
+	
+	var filled_dimensions := filled.get_size() if filled else Vector2.ZERO
+	var empty_dimensions := empty.get_size() if empty else Vector2.ZERO
+		
+	match fill_mode:
+		FillMode.RIGHT_TO_LEFT:
+			_filler = RightToLeftFiller.new(filled_dimensions, empty_dimensions)
+		FillMode.TOP_TO_BOTTOM:
+			_filler = TopToBottomFiller.new(filled_dimensions, empty_dimensions)
+		FillMode.BOTTOM_TO_TOP:
+			_filler = BottomToTopFiller.new(filled_dimensions, empty_dimensions)			
+		_:
+			_filler = LeftToRightFiller.new(filled_dimensions, empty_dimensions)
+	
 	update()
 
 
@@ -52,6 +80,7 @@ func get_fill_mode() -> int:
 
 func set_filled(val: Texture) -> void:
 	filled = val
+	_filler.filled_dimensions = val.get_size() if val else Vector2.ZERO
 	update()
 
 
@@ -61,6 +90,7 @@ func get_filled() -> Texture:
 
 func set_empty(val: Texture) -> void:
 	empty = val
+	_filler.empty_dimensions = val.get_size() if val else Vector2.ZERO
 	update()
 
 
@@ -109,52 +139,3 @@ func set_value(val: int) -> void:
 
 func get_value() -> int:
 	return value
-
-
-func _update_rect_size() -> void:
-	var height := 0.0
-	var width := 0.0
-	
-	if filled and empty:
-		height = max(filled.get_height(), empty.get_height())
-		width = filled.get_width() * value + empty.get_width() * (max_value - value)
-	elif filled:
-		height = filled.get_height()
-		width = filled.get_width() * max_value
-	elif empty:
-		height = empty.get_height()
-		width = empty.get_width() * max_value
-	
-	rect_min_size = Vector2(width, height)
-	rect_size = rect_min_size
-
-
-func _get_initial_pos() -> Vector2:
-	var texture: Texture = null
-	
-	if filled:
-		texture = filled
-	elif empty:
-		texture = empty
-	
-	match fill_mode:
-		FillMode.RIGHT_TO_LEFT:
-			return Vector2(rect_size.x - texture.get_width(), 0)
-		FillMode.BOTTOM_TO_TOP:
-			return Vector2(0, rect_size.y - texture.get_height())
-	
-	return Vector2()
-
-
-func _advance_pos(pos: Vector2, texture_dimensions: Vector2) -> Vector2:
-	match fill_mode:
-		FillMode.LEFT_TO_RIGHT:
-			pos.x += texture_dimensions.x
-		FillMode.RIGHT_TO_LEFT:
-			pos.x -= texture_dimensions.x
-		FillMode.TOP_TO_BOTTOM:
-			pos.y += texture_dimensions.y
-		FillMode.BOTTOM_TO_TOP:
-			pos.y -= texture_dimensions.y
-	
-	return pos
